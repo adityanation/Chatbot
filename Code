@@ -1,78 +1,26 @@
-# ---------- Main Menu ----------
-def main_menu_validate(x):
- """Input validation for mainmenu() function"""
- if x == "1":
- wikichat()
- elif x == "exit":
- print("Thank you! Goodbye!")
- sys.exit()
- elif x == "help":
- instructions()
- time.sleep(1)
- mainmenu()
- elif x == "return":
- mainmenu()
- else:
- return False
-def mainmenu(): # Main Function
- """Asks the user what they want to do and redirects accordingly"""
- print(
- "\nWhat do you want to do? Type the number that corresponds to the action."
-)
- time.sleep(1)
- print(
- "\n\n[1] Find Information about something you want to learn (Powered by Wikipedia)"
- )
- x = input(">>> ")
- main_menu_result = main_menu_validate(x)
- if main_menu_result == False:
- while main_menu_result == False:
- print("Please enter a valid input:")
- x = input(">>> ")
- main_menu_result = main_menu_validate(x)
-# -- Return to Main Menu --
-def wiki_return_validate(x):
- """Validates input for wiki_return() function."""
- if x in yes:
- mainmenu()
- elif x in no:
- wikichat()
- else:
- return False
-def wiki_return():
- """Returns to the mainmenu() function from the wikichat() function"""
- print("Do you want to return to the main menu?")
- x = input(">>> ")
- if x == "exit":
- print("Thank you! Goodbye!")
- sys.exit()
- elif x == "help":
- instructions()
- elif x == "return":
- mainmenu()
- else:
- wiki_validation_result = wiki_return_validate(x)
- if wiki_validation_result == False:
- while wiki_validation_result == False:
- print("Please enter a valid input (yes or no):")
- x = input(">>> ")
- wiki_validation_result = wiki_return_validate(x)
-# ----- Retrieve Summary of Wikipedia Article -----
-def wiki_article_validate(articlename):
- """Validates the input for the wikichat() function"""
- page_py = wiki_wiki.page(articlename)
- if page_py.exists() == True:
- print("Here you go,", name, ":")
- print(
- "Page - Title: %s" % page_py.title
- )
- print(
- "Page - Summary: %s" % page_py.summary
-print(
- "Hello, my name is Python Chatbot!\nI was created by Nikhil Sharma and Aditya Sinha."
-)
-time.sleep(1)
-returnname()
-instructions()
-print("Now, let's get started!")
-mainmenu()
+from flask import Flask, request, jsonify
+import openai
+
+app = Flask(__name__)
+
+# Set your OpenAI API key (Replace 'your_openai_api_key' with your actual API key)
+openai.api_key = "your_openai_api_key"
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_message = data.get("message", "")
+
+    if not user_message:
+        return jsonify({"error": "Message is required"}), 400
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": user_message}]
+    )
+
+    bot_reply = response["choices"][0]["message"]["content"]
+    return jsonify({"reply": bot_reply})
+
+if __name__ == '__main__':
+    app.run(debug=True)
