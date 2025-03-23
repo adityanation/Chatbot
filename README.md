@@ -57,7 +57,7 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ## Contact
 For any queries or contributions, feel free to reach out:
-- **GitHub**: [Your GitHub Profile](https://github.com/yourusername)
-- **Email**: your.email@example.com
+- **GitHub**: [Your GitHub Profile](https://github.com/yourusern)
+- **Email**: adityasinha06841@gmail.com
 
 
